@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ob-havo sayti</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <script src="{% static 'js/script.js' %}" defer></script>
+</head>
+<body>
+  <div class="card">
+    <form method="POST" class="search">
+      {% csrf_token %}
+      <input type="text" name="city" class="search-bar" placeholder="Shahar nomini yozing" required />
+      <button type="submit">
+        🔍
+      </button>
+    </form>
+
+    {% if weather_data %}
+      {% if weather_data.error %}
+        <p style="color: red; text-align: center;">{{ weather_data.error }}</p>
+      {% else %}
+
+        <div class="weather">
+          <h2 class="city">Ob-havo: {{ weather_data.city }}</h2>
+          <h1 class="temp">{{ weather_data.temperature|floatformat:1 }}°C</h1>
+          <div class="flex">
+            <img src="https://openweathermap.org/img/wn/{{ weather_data.icon }}@2x.png" alt="icon" class="icon" />
+            <div class="description">{{ weather_data.description }}</div>
+          </div>
+          <div class="humidity">Namlik: {{ weather_data.humidity }}%</div>
+          <div class="wind">Shamol tezligi: {{ weather_data.wind_speed }} km/soat</div>
+          <div class="pressure">Bosim: {{ weather_data.pressure }} hPa</div>
+        </div>
+      {% endif %}
+    {% endif %}
+    <!-- Bu mavjud ma'lumotdan keyin -->
+{% if weather_data %}
+  <a href="{% url 'forecast' %}?city={{ weather_data.city }}" class="btn">7 kunlik ob-havo</a>
+{% endif %}
+
+  </div>
+</body>
+</html>

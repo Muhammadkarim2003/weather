@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>7 kunlik ob-havo</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            padding-top: 20px;
+            color: white;
+        }
+
+        .forecast-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .day-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #2980b9;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .day-card img {
+            width: 80px;
+            height: 80px;
+        }
+
+        .day-card p {
+            margin: 6px 0;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn, .download-btn {
+            display: inline-block;
+            margin: 10px;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .download-btn {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .download-btn:hover {
+            background-color: #1e8449;
+        }
+
+        @media (max-width: 768px) {
+            .forecast-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .forecast-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ city }} shahrining 7 kunlik ob-havosi</h1>
+
+    <div class="forecast-container">
+        {% for day in forecast %}
+            <div class="day-card">
+                <h3>{{ day.date }}</h3>
+                <img src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="icon">
+                <p><strong>Harorat:</strong> {{ day.temp }}°C</p>
+                <p>{{ day.description }}</p>
+                <p><strong>Namlik:</strong> {{ day.humidity }}%</p>
+                <p><strong>Shamol:</strong> {{ day.wind_speed }} km/soat</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="btn-container">
+        <a href="{% url 'home' %}" class="back-btn">🔙 Asosiy sahifaga qaytish</a>
+        <a href="{% url 'download_forecast_pdf' %}?city={{ city }}" class="download-btn">📄 PDF yuklab olish</a>
+    </div>
+</body>
+</html>
